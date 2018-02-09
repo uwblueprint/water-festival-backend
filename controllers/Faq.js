@@ -1,18 +1,6 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-var mongodb = require('mongodb');
-
-const faqRouter = express.Router()
-
-
-var Faq = require('../models/FAQ');
-
-faqRouter.use(cors())
-faqRouter.use(bodyParser.json());
-faqRouter.use(bodyParser.urlencoded({
-  extended: true
-}));
+const faqRouter = require('express').Router();
+const mongodb = require('mongodb');
+const Faq = require('../models/FAQ');
 
 faqRouter.get('/list', function(req, res) {
 	Faq.find(function(err, faqs) {

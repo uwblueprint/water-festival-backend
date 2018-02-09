@@ -1,16 +1,6 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-var mongodb = require('mongodb');
-var Activity = require('../models/Activity');
-
-const activityRouter = express.Router()
-
-activityRouter.use(cors())
-activityRouter.use(bodyParser.json());
-activityRouter.use(bodyParser.urlencoded({
-  extended: true
-}));
+const activityRouter = require('express').Router();
+const mongodb = require('mongodb');
+const Activity = require('../models/Activity');
 
 activityRouter.get('/list', function(req, res) {
   Activity.find(function(err, activities) {
