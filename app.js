@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/', routes);
 
 // Connects our server to mongoDB
-mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@ds249605.mlab.com:49605/water_festival`, {
+mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@ds225028.mlab.com:25028/waterfestivaldb`, {
 	useMongoClient: true,
 });
 
