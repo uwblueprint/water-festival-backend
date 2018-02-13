@@ -8,6 +8,8 @@ mongoose.Promise = require('bluebird');
 
 require('dotenv').config();
 
+const PORT = process.env.PORT || 9090;
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -22,7 +24,7 @@ mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@
 	useMongoClient: true,
 });
 
-app.listen(9090, function () {
+app.listen(PORT, function () {
   // eslint-disable-next-line no-console
   console.log('Backend server is listening on port 9090!')
 });
