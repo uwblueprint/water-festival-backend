@@ -8,7 +8,8 @@ var UserSchema = new mongoose.Schema({
     min : 1,
     max : 5
   },
-  phoneNumber: String
+  phoneNumber: String,
+	activities: [String]
 }, {timestamps: true});
 
 // Requires population of author
@@ -20,6 +21,7 @@ UserSchema.methods.toJSONFor = function(){
     school: this.school,
     day: this.day,
     phoneNumber: this.phoneNumber,
+		activities: this.activities
   };
 };
 
