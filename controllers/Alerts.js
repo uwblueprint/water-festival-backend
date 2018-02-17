@@ -5,7 +5,7 @@ const Alert = require('../models/Alert');
 // get a list of alerts
 AlertRouter.get('/list', function(req, res) {
 	Alert.find(function(err, alerts) {
-		if (err) res.json(err);
+		if (err) return res.json(err);
 		const mappedAlerts = alerts.map(q => q.toJSONFor());
 		res.json(mappedAlerts);
 	});
