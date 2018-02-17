@@ -8,28 +8,28 @@ AlertRouter.get('/list', function(req, res) {
 		if (err) {
 			res.json(err);
 		}
-		CurrAlert = CurrAlert.map(q => q.toJSONFor());
-		res.json(currAlert);
+		const CurrAlert = CurrAlert.map(q => q.toJSONFor());
+		res.json(CurrAlert);
 	});
 })
 
 // get a specific alert
 AlertRouter.get('/id/:id', function(req, res) {
   const id = req.params.id;
-  Alert.findById(id, function(err, user) {
+  Alert.findById(id, function(err, CurrAlert) {
     if (err) {
       return res.status(500).json(err);
     }
-    if (!user) {
-      return res.json("User not found!");
+    if (!CurrAlert) {
+      return res.json("Alert not found!");
     }
-    res.json(user);
+    res.json(Alert);
   });
 });
 
 // delete a specific alert
 AlertRouter.delete('/delete', function(req, res) {
-	var ids = req.body.currAlertIDs.map(function(id) {
+	const ids = req.body.AlertIDs.map(function(id) {
 		return new mongodb.ObjectID(id);
 	});
 
@@ -38,12 +38,12 @@ AlertRouter.delete('/delete', function(req, res) {
 			res.send(err);
 		}
 	});
-	res.send('Deleted Alerts!');
+	res.send('Deleted Alert/Alerts!');
 })
 
 // post a new alert
 AlertRouter.post('/insert', function(req, res) {
-	var NewAlert = New Alert();
+	const NewAlert = New Alert();
 	NewAlert.Id = req.body.Id;
   NewAlert.Name = req.body.Name;
   NewAlert.Description = req.body.Description;
@@ -64,15 +64,15 @@ AlertRouter.post('/insert', function(req, res) {
 
 // editing an existing alert
 AlertRouter.post('/edit', function(req, res) {
-	var AlertToEdit = req.body;
+	const AlertToEdit = req.body;
 
-	Alert.findById(AlertToEdit.Id, function(err, OldAlert) {
+	Alert.findById(AlertToEdit.Id, function(err, Alert) {
 		if (err) {
 			res.send(err);
 		} else if (!OldAlert) {
 			res.send('Alert ID not found!');
 		}
-		OldAlert.set({
+		Alert.set({
       Id: AlertToEdit.Id
 			Name: AlertToEdit.Name,
 			Description: AlertToEdit.Description,
