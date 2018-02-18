@@ -45,10 +45,10 @@ AlertRouter.delete('/delete', function(req, res) {
 AlertRouter.post('/insert', function(req, res) {
 	const NewAlert = New Alert();
 	NewAlert.Id = req.body.Id;
-  NewAlert.Name = req.body.Name;
-  NewAlert.Description = req.body.Description;
-  NewAlert.Timestamp = req.body.Timestamp;
-  NewAlert.isSmsSent = req.body.isSmsSent;
+	NewAlert.Name = req.body.Name;
+	NewAlert.Description = req.body.Description;
+	NewAlert.Timestamp = req.body.Timestamp;
+	NewAlert.isSmsSent = req.body.isSmsSent;
 
 	Alert.save(function(err) {
 		if (err) {
@@ -73,11 +73,11 @@ AlertRouter.put('/edit', function(req, res) {
 			res.send('Alert ID not found!');
 		}
 		Alert.set({
-      Id: AlertToEdit.Id
+			Id: AlertToEdit.Id
 			Name: AlertToEdit.Name,
 			Description: AlertToEdit.Description,
-      Timestamp: AlertToEdit.Timestamp,
-      isSmsSent: AlertToEdit.isSmsSent
+			Timestamp: AlertToEdit.Timestamp,
+			isSmsSent: AlertToEdit.isSmsSent
 		});
 		Alert.save(function(err, UpdatedAlert) {
 			if (err) return err.message;
