@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 
-var mongoose = require('mongoose');
-
 var AlertSchema = new mongoose.Schema({
   Id: Number
   Name: String,

@@ -63,7 +63,7 @@ AlertRouter.post('/insert', function(req, res) {
 });
 
 // editing an existing alert
-AlertRouter.post('/edit', function(req, res) {
+AlertRouter.put('/edit', function(req, res) {
 	const AlertToEdit = req.body;
 
 	Alert.findById(AlertToEdit.Id, function(err, Alert) {
