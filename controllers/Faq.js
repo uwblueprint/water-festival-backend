@@ -4,26 +4,31 @@ const Faq = require('../models/FAQ');
 
 faqRouter.get('/list', function(req, res) {
 	Faq.find(function(err, faqs) {
-		if (err) {
-			res.json(err);
-		}
+		if (err) return res.json(err);
 		faqs = faqs.map(q => q.toJSONFor());
 		res.json(faqs);
 	});
-})
+});
+
+faqRouter.get('/id/:id', function(req, res) {
+  const id = req.params.id;
+  Faq.findById(id, function(err, faq) {
+    if (err) return res.status(500).json(err);
+    if (!faq) return res.json("Faq not found!");
+    res.json(faq);
+  });
+});
 
 faqRouter.delete('/delete', function(req, res) {
-	var ids = req.body.faqIDs.map(function(id) {
+	const ids = req.body.faqIDs.map(function(id) {
 		return new mongodb.ObjectID(id);
 	});
 
 	Faq.deleteMany({_id: {$in: ids}}, function(err) {
-		if (err) {
-			res.send(err);
-		}
+		if (err) return res.send(err);
 	});
 	res.send('Deleted questions!');
-})
+});
 
 faqRouter.post('/insert', function(req, res) {
 	var faq = new Faq();
@@ -42,21 +47,19 @@ faqRouter.post('/insert', function(req, res) {
 	});
 });
 
-faqRouter.post('/edit', function(req, res) {
+faqRouter.put('/edit', function(req, res) {
 	var questionToEdit = req.body;
 
 	Faq.findById(questionToEdit.id, function(err, faq) {
-		if (err) {
-			res.send(err);
-		} else if (!faq) {
-			res.send('Question ID not found!');
-		}
+		if (err) return res.send(err);
+		else if (!faq) return res.send('Question ID not found!');
+
 		faq.set({
 			question: questionToEdit.question,
 			answer: questionToEdit.answer
 		});
 		faq.save(function(err, updatedFaq) {
-			if (err) return err.message;
+			if (err) return res.send(err.message);
 
 			res.json({
 				message: 'Question updated!',
