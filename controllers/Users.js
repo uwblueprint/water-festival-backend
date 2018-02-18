@@ -54,14 +54,14 @@ userRouter.post('/insert', function(req, res) {
 
 // Updates user's list of activities, given an user id and an array of
 //  activity ids
-userRouter.put('/activities/', function(req, res) {
-	const { id, activities } = req.body;
+userRouter.put('/edit', function(req, res) {
+	const userToEdit = req.body;
 
-	User.findById(id, function(err, user) {
+	User.findById(userToEdit.id, function(err, user) {
 		if (err) return res.send(err);
 		else if (!user) return res.send('User ID not found!');
 
-		user.set({ activities });
+		user.set(userToEdit);
 		user.save(function(err, updatedUser) {
 			if (err) return res.send(err.message);
 
