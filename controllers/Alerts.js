@@ -51,7 +51,7 @@ alertRouter.post('/insert', function(req, res) {
 	newAlert.save(function(err) {
 		if (err) return res.status(500).json(err);
 		else {
-			res.json({
+			return res.json({
 				message: 'Alert created!',
 				Alert,
 			});
