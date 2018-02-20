@@ -1,59 +1,56 @@
-const AlertRouter = require('express').Router();
+const alertRouter = require('express').Router();
 const mongodb = require('mongodb');
 const Alert = require('../models/Alert');
 
 // get a list of alerts
-AlertRouter.get('/list', function(req, res) {
-	Alert.find(function(err, CurrAlert) {
-		if (err) {
-			res.json(err);
-		}
-		const CurrAlert = CurrAlert.map(q => q.toJSONFor());
-		res.json(CurrAlert);
+alertRouter.get('/list', function(req, res) {
+	Alert.find(function(err, alerts) {
+		if (err) res.json(err);
+		const mappedAlerts = alerts.map(q => q.toJSONFor());
+		res.json(mappedAlerts);
 	});
 })
 
 // get a specific alert
-AlertRouter.get('/id/:id', function(req, res) {
+alertRouter.get('/id/:id', function(req, res) {
   const id = req.params.id;
-  Alert.findById(id, function(err, CurrAlert) {
-    if (err) {
-      return res.status(500).json(err);
-    }
-    if (!CurrAlert) {
-      return res.json("Alert not found!");
-    }
-    res.json(Alert);
+  Alert.findById(id, function(err, alert) {
+    if (err) return res.status(500).json(err);
+    if (!alert) return res.json("Alert not found!");
+    res.json(alert);
   });
 });
 
 // delete a specific alert
-AlertRouter.delete('/delete', function(req, res) {
+alertRouter.delete('/delete', function(req, res) {
 	const ids = req.body.AlertIDs.map(function(id) {
 		return new mongodb.ObjectID(id);
 	});
 
-	Alert.deleteMany({_id: {$in: ids}}, function(err) {
-		if (err) {
-			res.send(err);
-		}
-	});
-	res.send('Deleted Alert/Alerts!');
-})
+  Alert.deleteMany({
+    _id: {
+      $in: ids
+    }
+  }, function(err) {
+    if (err) return res.status(500).send(err);
+  });
+  res.send({
+    "message": "Deleted alert/alerts!"
+  });
+});
 
 // post a new alert
-AlertRouter.post('/insert', function(req, res) {
-	const NewAlert = New Alert();
-	NewAlert.Id = req.body.Id;
-	NewAlert.Name = req.body.Name;
-	NewAlert.Description = req.body.Description;
-	NewAlert.Timestamp = req.body.Timestamp;
-	NewAlert.isSmsSent = req.body.isSmsSent;
+alertRouter.post('/insert', function(req, res) {
+	const newAlert = new Alert();
+	newAlert.id = req.body.id;
+	newAlert.Name = req.body.Name;
+	newAlert.Description = req.body.Description;
+	newAlert.Timestamp = req.body.Timestamp;
+	newAlert.isSmsSent = req.body.isSmsSent;
 
-	Alert.save(function(err) {
-		if (err) {
-			res.json(err);
-		} else {
+	newAlert.save(function(err) {
+		if (err) return res.status(500).json(err);
+		else {
 			res.json({
 				message: 'Alert created!',
 				Alert,
@@ -63,31 +60,28 @@ AlertRouter.post('/insert', function(req, res) {
 });
 
 // editing an existing alert
-AlertRouter.put('/edit', function(req, res) {
-	const AlertToEdit = req.body;
+alertRouter.put('/edit', function(req, res) {
+	const alertToEdit = req.body;
 
-	Alert.findById(AlertToEdit.Id, function(err, Alert) {
-		if (err) {
-			res.send(err);
-		} else if (!OldAlert) {
-			res.send('Alert ID not found!');
-		}
-		Alert.set({
-			Id: AlertToEdit.Id
-			Name: AlertToEdit.Name,
-			Description: AlertToEdit.Description,
-			Timestamp: AlertToEdit.Timestamp,
-			isSmsSent: AlertToEdit.isSmsSent
+	Alert.findById(alertToEdit.id, function(err, alert) {
+		if (err) return res.status(500).send(err);
+		else if (!alert) return res.send('Alert ID not found!');
+		alert.set({
+			id: alertToEdit.id,
+			name: alertToEdit.name,
+			description: alertToEdit.description,
+			timestamp: alertToEdit.timestamp,
+			isSmsSent: alertToEdit.isSmsSent
 		});
-		Alert.save(function(err, UpdatedAlert) {
+		alert.save(function(err, updatedAlert) {
 			if (err) return err.message;
 
 			res.json({
 				message: 'Alert updated!',
-				Alert: UpdatedAlert
+				alert: updatedAlert
 			});
 		});
 	});
 });
 
-module.exports = AlertRouter;
+module.exports = alertRouter;
