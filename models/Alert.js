@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var AlertSchema = new mongoose.Schema({
-  Id: Number
+  id: Number
   Name: String,
   Description: String,
   Timestamp: Date
@@ -11,7 +11,7 @@ var AlertSchema = new mongoose.Schema({
 // Requires population of author
 AlertSchema.methods.toJSONFor = function() {
   return {
-    Id: this.Id
+    id: this.id
     Name: this.Name,
     Description: this.Description,
     Timestamp: this.Timestamp,
