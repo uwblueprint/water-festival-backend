@@ -6,7 +6,7 @@ var ActivitySchema = new mongoose.Schema({
   startTime: Date,
   endTime: Date,
   station: Number,
-  grade: Number,
+  grade: [Number],
   imageURI: String,
   isNewActivity: Boolean,
   isOpen: Boolean,
