@@ -6,7 +6,7 @@ router.use('/users', require('./Users'));
 router.use ('/alerts', require('./Alerts'))
 
 router.get('/', function(req, res) {
-	res.send("bacon!");
+  res.send("bacon!");
 });
 
 module.exports = router;

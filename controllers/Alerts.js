@@ -4,11 +4,11 @@ const Alert = require('../models/Alert');
 
 // get a list of alerts
 AlertRouter.get('/list', function(req, res) {
-	Alert.find(function(err, alerts) {
-		if (err) return res.json(err);
-		const mappedAlerts = alerts.map(q => q.toJSONFor());
-		res.json(mappedAlerts);
-	});
+  Alert.find(function(err, alerts) {
+    if (err) return res.json(err);
+    const mappedAlerts = alerts.map(q => q.toJSONFor());
+    res.json(mappedAlerts);
+  });
 })
 
 // get a specific alert
@@ -23,9 +23,9 @@ AlertRouter.get('/id/:id', function(req, res) {
 
 // delete a specific alert
 AlertRouter.delete('/delete', function(req, res) {
-	const ids = req.body.alertIDs.map(function(id) {
-		return new mongodb.ObjectID(id);
-	});
+  const ids = req.body.alertIDs.map(function(id) {
+    return new mongodb.ObjectID(id);
+  });
 
   Alert.deleteMany({
     _id: {
@@ -41,43 +41,43 @@ AlertRouter.delete('/delete', function(req, res) {
 
 // post a new alert
 AlertRouter.post('/insert', function(req, res) {
-	const newAlert = new Alert();
-	newAlert.name = req.body.name;
-	newAlert.description = req.body.description;
-	newAlert.isSmsSent = req.body.isSmsSent;
+  const newAlert = new Alert();
+  newAlert.name = req.body.name;
+  newAlert.description = req.body.description;
+  newAlert.isSmsSent = req.body.isSmsSent;
 
-	newAlert.save(function(err) {
-		if (err) return res.status(500).json(err);
-		else {
-			return res.json({
-				message: 'Alert created!',
-				alert: newAlert
-			});
-		}
-	});
+  newAlert.save(function(err) {
+    if (err) return res.status(500).json(err);
+    else {
+      return res.json({
+        message: 'Alert created!',
+        alert: newAlert
+      });
+    }
+  });
 });
 
 // editing an existing alert
 AlertRouter.put('/edit', function(req, res) {
-	const alertToEdit = req.body;
+  const alertToEdit = req.body;
 
-	Alert.findById(alertToEdit.id, function(err, alert) {
-		if (err) return res.status(500).send(err);
-		else if (!alert) return res.send('Alert ID not found!');
-		alert.set({
-			name: alertToEdit.name,
-			description: alertToEdit.description,
-			isSmsSent: alertToEdit.isSmsSent
-		});
-		alert.save(function(err, updatedAlert) {
-			if (err) return err.message;
+  Alert.findById(alertToEdit.id, function(err, alert) {
+    if (err) return res.status(500).send(err);
+    else if (!alert) return res.send('Alert ID not found!');
+    alert.set({
+      name: alertToEdit.name,
+      description: alertToEdit.description,
+      isSmsSent: alertToEdit.isSmsSent
+    });
+    alert.save(function(err, updatedAlert) {
+      if (err) return err.message;
 
-			res.json({
-				message: 'Alert updated!',
-				alert: updatedAlert
-			});
-		});
-	});
+      res.json({
+        message: 'Alert updated!',
+        alert: updatedAlert
+      });
+    });
+  });
 });
 
 module.exports = AlertRouter;

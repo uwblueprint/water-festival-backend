@@ -10,7 +10,7 @@ var AlertSchema = new mongoose.Schema({
 AlertSchema.methods.toJSONFor = function() {
   return {
     id: this._id,
-		createdAt: this.createdAt,
+    createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     name: this.name,
     description: this.description,

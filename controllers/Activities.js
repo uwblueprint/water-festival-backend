@@ -62,9 +62,9 @@ activityRouter.put('/edit', function(req, res) {
   const activityToEdit = req.body;
 
   Activity.findById(activityToEdit.id, function(err, activity) {
-		if (err) return res.send(err.message);
-		else if (!activity) return res.send('Activity ID not found!');
-		
+    if (err) return res.send(err.message);
+    else if (!activity) return res.send('Activity ID not found!');
+
     activity.set(activityToEdit);
     activity.save(function(err, updatedActivity) {
       if (err) return res.status(500).json(err);
