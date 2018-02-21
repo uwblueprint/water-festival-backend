@@ -46,8 +46,8 @@ userRouter.post('/insert', function(req, res) {
 		password,
 		activities
 	} = req.body;
-	if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
 
+	if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
 
   const user = new User({
 		name,
@@ -86,6 +86,18 @@ userRouter.put('/edit', function(req, res) {
 				user: updatedUser
 			});
 		});
+	});
+});
+
+// Authenticate user
+userRouter.post('/authenticate', function(req, res) {
+	const { username, password } = req.body;
+	if (!username || !password) return res.status(500).send('Required fields not filled out.');
+
+	User.authenticate(username, password, (err, user) => {
+		if (err) return res.status(500).json({ success: false, err });
+		else if (!user) return res.json({ success: false });
+		res.json({ success: true, user });
 	});
 });
 
