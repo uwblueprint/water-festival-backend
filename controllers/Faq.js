@@ -37,7 +37,7 @@ faqRouter.post('/insert', function(req, res) {
 
 	faq.save(function(err) {
 		if (err) return res.status(500).json(err);
-		 else {
+		else {
 			return res.json({
 				message: 'Question created!',
 				faq,

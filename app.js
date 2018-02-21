@@ -37,7 +37,7 @@ app.use('/', routes);
 
 // Connects our server to mongoDB
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@ds225028.mlab.com:25028/waterfestivaldb`, {
-	useMongoClient: true,
+  useMongoClient: true,
 });
 
 // Passport.js for user authentication
@@ -49,11 +49,11 @@ passport.use(new LocalStrategy(
       if (!user) return done(null, false, { message: 'Incorrect username.' });
 
       User.authenticate(username, password, (err, user) => {
-    		if (err) return done(err);
-    		else if (!user) return done(null, false, { message: 'Incorrect password.' });
+        if (err) return done(err);
+        else if (!user) return done(null, false, { message: 'Incorrect password.' });
 
         return done(null, user);
-    	});
+      });
     });
   }
 ));
