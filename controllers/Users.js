@@ -1,5 +1,6 @@
 const userRouter = require('express').Router();
 const mongodb = require('mongodb');
+const passport = require('passport');
 const User = require('../models/User');
 
 userRouter.get('/list', function(req, res) {
@@ -90,15 +91,21 @@ userRouter.put('/edit', function(req, res) {
 });
 
 // Authenticate user
-userRouter.post('/authenticate', function(req, res) {
-	const { username, password } = req.body;
-	if (!username || !password) return res.status(500).send('Required fields not filled out.');
-
-	User.authenticate(username, password, (err, user) => {
-		if (err) return res.status(500).json({ success: false, err });
-		else if (!user) return res.json({ success: false });
+userRouter.post('/authenticate',
+	passport.authenticate('local', {
+		failureRedirect: '/users/auth_fail',
+		failureFlash: true
+	}),
+	function(req, res) {
+		const { user } = req;
 		res.json({ success: true, user });
-	});
+	}
+);
+
+// Authentication failed
+userRouter.get('/auth_fail', function(req, res) {
+	const { error } = req.flash();
+	res.json({ success: false, error: error[0] });
 });
 
 module.exports = userRouter;
