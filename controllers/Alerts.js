@@ -23,7 +23,7 @@ alertRouter.get('/id/:id', function(req, res) {
 
 // delete a specific alert
 alertRouter.delete('/delete', function(req, res) {
-	const ids = req.body.AlertIDs.map(function(id) {
+	const ids = req.body.alertIDs.map(function(id) {
 		return new mongodb.ObjectID(id);
 	});
 
@@ -43,9 +43,9 @@ alertRouter.delete('/delete', function(req, res) {
 alertRouter.post('/insert', function(req, res) {
 	const newAlert = new Alert();
 	newAlert.id = req.body.id;
-	newAlert.Name = req.body.Name;
-	newAlert.Description = req.body.Description;
-	newAlert.Timestamp = req.body.Timestamp;
+	newAlert.name = req.body.bame;
+	newAlert.description = req.body.description;
+	newAlert.timestamp = req.body.timestamp;
 	newAlert.isSmsSent = req.body.isSmsSent;
 
 	newAlert.save(function(err) {
