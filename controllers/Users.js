@@ -37,11 +37,27 @@ userRouter.delete('/delete', function(req, res) {
 });
 
 userRouter.post('/insert', function(req, res) {
-  const user = new User();
-  user.name = req.body.name;
-  user.school = req.body.school;
-  user.day = req.body.day;
-  user.phoneNumber = req.body.phoneNumber;
+	const {
+		name,
+		username,
+		school,
+		day,
+		phoneNumber,
+		password,
+		activities
+	} = req.body;
+	if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
+
+
+  const user = new User({
+		name,
+		username,
+		school,
+		day,
+		phoneNumber,
+		password,
+		activities
+	});
 
   user.save(function(err) {
     if (err) return res.status(500).json(err);
