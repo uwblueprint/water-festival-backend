@@ -45,7 +45,6 @@ alertRouter.post('/insert', function(req, res) {
 	newAlert.id = req.body.id;
 	newAlert.name = req.body.bame;
 	newAlert.description = req.body.description;
-	newAlert.timestamp = req.body.timestamp;
 	newAlert.isSmsSent = req.body.isSmsSent;
 
 	newAlert.save(function(err) {
@@ -53,7 +52,7 @@ alertRouter.post('/insert', function(req, res) {
 		else {
 			return res.json({
 				message: 'Alert created!',
-				Alert,
+				alert: newAlert
 			});
 		}
 	});
