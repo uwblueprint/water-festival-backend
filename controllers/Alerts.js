@@ -43,7 +43,7 @@ alertRouter.delete('/delete', function(req, res) {
 alertRouter.post('/insert', function(req, res) {
 	const newAlert = new Alert();
 	newAlert.id = req.body.id;
-	newAlert.name = req.body.bame;
+	newAlert.name = req.body.name;
 	newAlert.description = req.body.description;
 	newAlert.isSmsSent = req.body.isSmsSent;
 
