@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const mongoose = require('mongoose');
 const routes = require('./controllers');
 const bodyParser = require('body-parser');
@@ -34,6 +35,10 @@ app.use(flash());
 
 //  Connect all our routes to our application
 app.use('/', routes);
+
+// Serve static files
+const dir = path.join(__dirname, 'public');
+app.use(express.static(dir));
 
 // Connects our server to mongoDB
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@ds225028.mlab.com:25028/waterfestivaldb`, {
