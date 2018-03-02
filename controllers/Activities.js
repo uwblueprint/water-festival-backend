@@ -40,8 +40,6 @@ activityRouter.post('/insert', function(req, res) {
   var activity = new Activity();
   activity.title = req.body.title;
   activity.description = req.body.description;
-  activity.startTime = req.body.startTime;
-  activity.endTime = req.body.endTime;
   activity.station = req.body.station;
   activity.grade = req.body.grade;
   activity.imageURI = req.body.imageURI;
