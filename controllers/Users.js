@@ -45,7 +45,8 @@ userRouter.post('/insert', function(req, res) {
     day,
     phoneNumber,
     password,
-    activities
+    activities,
+    alertsViewed,
   } = req.body;
 
   if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
@@ -57,7 +58,8 @@ userRouter.post('/insert', function(req, res) {
     day,
     phoneNumber,
     password,
-    activities
+    activities,
+    alertsViewed,
   });
 
   user.save(function(err) {

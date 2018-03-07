@@ -14,7 +14,7 @@ AlertSchema.methods.toJSONFor = function() {
     updatedAt: this.updatedAt,
     name: this.name,
     description: this.description,
-    isSmsSent: this.isSmsSent
+    isSmsSent: this.isSmsSent,
   };
 };
 
