@@ -34,16 +34,6 @@ const UserSchema = new mongoose.Schema({
   activities: [String]
 }, {timestamps: true});
 
-//hashing a password before saving it to the database
-UserSchema.pre('save', function (next) {
-  const user = this;
-  bcrypt.hash(user.password, 10, function (err, hash){
-    if (err) return next(err);
-    user.password = hash;
-    next();
-  })
-});
-
 //authenticate input against database
 UserSchema.statics.authenticate = function (username, password, callback) {
   User.findOne({ username })

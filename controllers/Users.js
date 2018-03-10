@@ -1,6 +1,7 @@
 const userRouter = require('express').Router();
 const mongodb = require('mongodb');
 const passport = require('passport');
+const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 userRouter.get('/list', function(req, res) {
@@ -50,23 +51,24 @@ userRouter.post('/insert', function(req, res) {
 
   if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
 
-  const user = new User({
-    name,
-    username,
-    school,
-    day,
-    phoneNumber,
-    password,
-    activities
-  });
-
-  user.save(function(err) {
-    if (err) return res.status(500).json(err);
-    res.json({
-      message: 'User created!',
-      user
+  bcrypt.hash(password, 10).then(hash => {
+    const user = new User({
+      name,
+      username,
+      school,
+      day,
+      phoneNumber,
+      password: hash,
+      activities
     });
-  });
+    user.save(function(err) {
+      if (err) return res.status(500).json(err);
+      res.json({
+        message: 'User created!',
+        user
+      });
+    });
+  }).catch(err => res.status(500).send(err));
 });
 
 // Updates user's list of activities, given an user id and an array of
@@ -78,15 +80,30 @@ userRouter.put('/edit', function(req, res) {
     if (err) return res.send(err);
     else if (!user) return res.send('User ID not found!');
 
-    user.set(userToEdit);
-    user.save(function(err, updatedUser) {
-      if (err) return res.send(err.message);
+    if (userToEdit.hasOwnProperty('password')) {
+      bcrypt.hash(userToEdit.password, 10).then(hash => {
+        userToEdit.password = hash;
+        user.set(userToEdit);
+        user.save(function(err, updatedUser) {
+          if (err) return res.send(err.message);
 
-      res.json({
-        message: 'User updated!',
-        user: updatedUser
+          res.json({
+            message: 'User updated!',
+            user: updatedUser
+          });
+        });
+      }).catch(err => res.status(500).send(err));
+    } else {
+      user.set(userToEdit);
+      user.save(function(err, updatedUser) {
+        if (err) return res.send(err.message);
+
+        res.json({
+          message: 'User updated!',
+          user: updatedUser
+        });
       });
-    });
+    }
   });
 });
 
