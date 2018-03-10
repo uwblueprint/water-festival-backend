@@ -3,8 +3,6 @@ var mongoose = require('mongoose');
 var ActivitySchema = new mongoose.Schema({
   title: String,
   description: String,
-  startTime: Date,
-  endTime: Date,
   station: Number,
   grade: [Number],
   imageURI: String,
@@ -20,8 +18,6 @@ ActivitySchema.methods.toJSONFor = function(){
     createdAt: this.createdAt,
     title: this.title,
     description: this.description,
-    startTime: this.startTime,
-    endTime: this.endTime,
     station: this.station,
     grade: this.grade,
     imageURI: this.imageURI,
