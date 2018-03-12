@@ -4,7 +4,7 @@ const Faq = require('../models/FAQ');
 
 faqRouter.get('/list', function(req, res) {
   Faq.find(function(err, faqs) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     const mappedFaqs = faqs.map(q => q.toJSONFor());
     return res.json(mappedFaqs);
   });
@@ -13,7 +13,7 @@ faqRouter.get('/list', function(req, res) {
 faqRouter.get('/id/:id', function(req, res) {
   const id = req.params.id;
   Faq.findById(id, function(err, faq) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     if (!faq) return res.json("Faq not found!");
     res.json(faq);
   });
@@ -25,7 +25,7 @@ faqRouter.delete('/delete', function(req, res) {
   });
 
   Faq.deleteMany({_id: {$in: ids}}, function(err) {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
   });
   res.send('Deleted questions!');
 });
@@ -36,7 +36,7 @@ faqRouter.post('/insert', function(req, res) {
   faq.answer = req.body.answer;
 
   faq.save(function(err) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     else {
       return res.json({
         message: 'Question created!',
@@ -50,7 +50,7 @@ faqRouter.put('/edit', function(req, res) {
   const questionToEdit = req.body;
 
   Faq.findById(questionToEdit.id, function(err, faq) {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
     else if (!faq) return res.send('Question ID not found!');
 
     faq.set({

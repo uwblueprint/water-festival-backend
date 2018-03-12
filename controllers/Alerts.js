@@ -15,7 +15,7 @@ AlertRouter.get('/list', function(req, res) {
 AlertRouter.get('/id/:id', function(req, res) {
   const id = req.params.id;
   Alert.findById(id, function(err, alert) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     if (!alert) return res.json("Alert not found!");
     res.json(alert);
   });
@@ -32,7 +32,7 @@ AlertRouter.delete('/delete', function(req, res) {
       $in: ids
     }
   }, function(err) {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
   });
   res.send({
     "message": "Deleted alert/alerts!"
@@ -47,7 +47,7 @@ AlertRouter.post('/insert', function(req, res) {
   newAlert.isSmsSent = req.body.isSmsSent;
 
   newAlert.save(function(err) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     else {
       return res.json({
         message: 'Alert created!',
@@ -62,7 +62,7 @@ AlertRouter.put('/edit', function(req, res) {
   const alertToEdit = req.body;
 
   Alert.findById(alertToEdit.id, function(err, alert) {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
     else if (!alert) return res.send('Alert ID not found!');
     alert.set({
       name: alertToEdit.name,

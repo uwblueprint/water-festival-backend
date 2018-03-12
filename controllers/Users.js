@@ -6,7 +6,7 @@ const User = require('../models/User');
 
 userRouter.get('/list', function(req, res) {
   User.find(function(err, users) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     const mappedUsers = users.map(q => q.toJSONFor());
     res.json(mappedUsers);
   });
@@ -15,7 +15,7 @@ userRouter.get('/list', function(req, res) {
 userRouter.get('/id/:id', function(req, res) {
   const id = req.params.id;
   User.findById(id, function(err, user) {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(400).json(err);
     if (!user) return res.json("User not found!");
     res.json(user);
   });
@@ -31,7 +31,7 @@ userRouter.delete('/delete', function(req, res) {
       $in: ids
     }
   }, function(err) {
-    if (err) return res.status(500).send(err);
+    if (err) return res.status(400).send(err);
   });
   res.send({
     "message": "Deleted user/users!"
@@ -50,7 +50,7 @@ userRouter.post('/insert', function(req, res) {
     alertsViewed,
   } = req.body;
 
-  if (!username || !name || !password) return res.status(500).send(`Required fields not filled out.`);
+  if (!username || !name || !password) return res.status(400).send(`Required fields not filled out.`);
 
   bcrypt.hash(password, 10).then(hash => {
     const user = new User({
@@ -63,13 +63,13 @@ userRouter.post('/insert', function(req, res) {
       activities
     });
     user.save(function(err) {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(400).json(err);
       res.json({
         message: 'User created!',
         user
       });
     });
-  }).catch(err => res.status(500).send(err));
+  }).catch(err => res.status(400).send(err));
 });
 
 // Updates user's list of activities, given an user id and an array of
@@ -93,7 +93,7 @@ userRouter.put('/edit', function(req, res) {
             user: updatedUser
           });
         });
-      }).catch(err => res.status(500).send(err));
+      }).catch(err => res.status(400).send(err));
     } else {
       user.set(userToEdit);
       user.save(function(err, updatedUser) {
