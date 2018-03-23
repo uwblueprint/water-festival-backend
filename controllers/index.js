@@ -4,6 +4,7 @@ router.use('/faq', require('./Faq'));
 router.use('/activities', require('./Activities'));
 router.use('/users', require('./Users'));
 router.use ('/alerts', require('./Alerts'))
+router.use('/tokens', require('./Tokens'));
 
 router.get('/', function(req, res) {
   res.send("bacon!");
