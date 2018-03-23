@@ -1,3 +1,4 @@
+const Expo = require('expo-server-sdk');
 const TokenRouter = require('express').Router();
 const mongodb = require('mongodb');
 const Token = require('../models/Token');
@@ -75,6 +76,53 @@ TokenRouter.put('/edit', function(req, res) {
         token: updatedToken
       });
     });
+  });
+});
+
+// send push notifications
+TokenRouter.post('/send', function(req, res){
+  const alert = req.body;
+
+  Token.find(function(err, tokens) {
+    if (err) return res.json(err);
+    const mappedTokens = tokens.map(q => q.toJSONFor());
+
+    var tokens = [];
+    for(var mappedToken of mappedTokens){
+      tokens.push(mappedToken.token);
+    }
+
+    var expo = new Expo();
+    var messages = [];
+    for (var token of tokens) {
+      if (!Expo.isExpoPushToken(token)) {
+        console.error(`Push token ${token} is not a valid Expo push token`);
+        continue;
+      }
+
+      messages.push({
+        to: token,
+        sound: 'default',
+        title: alert.name,
+        body: alert.description,
+        data: { message: `${alert.name} - ${alert.description}` },
+      })
+    }
+
+    var chunks = expo.chunkPushNotifications(messages);
+
+    (async () => {
+      for (var chunk of chunks) {
+        try {
+          var receipts = await expo.sendPushNotificationsAsync(chunk);
+          res.send({
+            "message": "Sent notification!"
+          });
+        } catch (error) {
+          res.status(400).send(error);
+        }
+      }
+    })();
   });
 });
 
