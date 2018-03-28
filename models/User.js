@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  prepChecked: [Number]
   activities: [String],
   alertsViewed: [String],
 }, {timestamps: true});
