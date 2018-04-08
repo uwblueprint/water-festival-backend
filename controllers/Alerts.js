@@ -1,6 +1,9 @@
 const AlertRouter = require('express').Router();
 const mongodb = require('mongodb');
 const Alert = require('../models/Alert');
+const User = require('../models/User');
+require('dotenv').config();
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // get a list of alerts
 AlertRouter.get('/list', function(req, res) {
@@ -81,5 +84,28 @@ AlertRouter.put('/edit', function(req, res) {
     });
   });
 });
+
+AlertRouter.post('/text', function(req, res) {
+  const alertToTextId = req.body.id;
+
+  Alert.findById(alertToTextId, function(err, alert) {
+    if (err) return res.status(400).send(err);
+
+    const { name, description } = alert;
+    const date = new Date().getDay();
+
+    User.find({ 'day': date }, function(err, people) {
+      if (err) return res.status(400).send(err);
+
+      const phoneNumbers = people.map(people => people.phoneNumber);
+
+      client.messages.create({
+        to: phoneNumbers,
+        from: process.env.TWILIO_NUMBER,
+        body: `${name} - ${description}`,
+      }).then(message => res.send(message.sid));
+    });
+  })
+})
 
 module.exports = AlertRouter;
