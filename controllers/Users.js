@@ -47,7 +47,7 @@ userRouter.post('/insert', function(req, res) {
     phoneNumber,
     password,
     activities,
-    alertsViewed,
+    lastAlertSeen,
   } = req.body;
 
   if (!username || !name || !password) return res.status(400).send(`Required fields not filled out.`);
@@ -87,7 +87,6 @@ userRouter.put('/edit', function(req, res) {
         user.set(userToEdit);
         user.save(function(err, updatedUser) {
           if (err) return res.send(err.message);
-
           res.json({
             message: 'User updated!',
             user: updatedUser

@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   activities: [String],
-  alertsViewed: [String],
+  lastAlertSeen: Date,
 }, {timestamps: true});
 
 //authenticate input against database
@@ -64,7 +64,7 @@ UserSchema.methods.toJSONFor = function(){
     phoneNumber: this.phoneNumber,
     password: this.password,
     activities: this.activities,
-    alertsViewed: this.alertsViewed,
+    lastAlertSeen: this.lastAlertSeen,
   };
 };
 

@@ -48,6 +48,7 @@ AlertRouter.post('/insert', function(req, res) {
   newAlert.name = req.body.name;
   newAlert.description = req.body.description;
   newAlert.isSmsSent = req.body.isSmsSent;
+  newAlert.sentDate = req.body.sentDate;
 
   newAlert.save(function(err) {
     if (err) return res.status(400).json(err);
@@ -70,7 +71,8 @@ AlertRouter.put('/edit', function(req, res) {
     alert.set({
       name: alertToEdit.name,
       description: alertToEdit.description,
-      isSmsSent: alertToEdit.isSmsSent
+      isSmsSent: alertToEdit.isSmsSent,
+      sentDate: alertToEdit.sentDate
     });
     alert.save(function(err, updatedAlert) {
       if (err) return err.message;
