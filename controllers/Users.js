@@ -81,6 +81,17 @@ userRouter.put('/edit', function(req, res) {
     if (err) return res.send(err);
     else if (!user) return res.send('User ID not found!');
 
+    if (userToEdit.hasOwnProperty('activities')) {
+      // Remove LUNCH if it's the only thing there
+      if (userToEdit.activities.length === 1 && userToEdit.activities.includes('LUNCH')) {
+        userToEdit.activities = [];
+      } else if (userToEdit.activities.length > 0 && !userToEdit.activities.includes('LUNCH')) {
+        // Add lunch if it doesn't exist
+        userToEdit.activities.push('LUNCH');
+      }
+    }
+
+
     if (userToEdit.hasOwnProperty('password')) {
       bcrypt.hash(userToEdit.password, 10).then(hash => {
         userToEdit.password = hash;
